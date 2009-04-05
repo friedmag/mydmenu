@@ -43,6 +43,10 @@ class MyDMenu
       @commands[command]
     when Proc
       @commands[command].call
+    when NilClass
+      # When there is no entry in @commands, assume
+      # the user typed in a custom command to execute
+      command
     else
       raise "Invalid command given: #{command}"
     end
