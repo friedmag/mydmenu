@@ -58,9 +58,7 @@ class MyDMenu
     end
   end
 
-  File.open(ConfigFile, 'r') do |f|
-    eval f.read
-  end
+  self.instance_eval(File.read(ConfigFile), ConfigFile)
 end
 
 MyDMenu.run
