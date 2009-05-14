@@ -1,26 +1,10 @@
 #!/usr/bin/ruby
 
-require 'fileutils'
-
-module DMenu
-  def dmenu(*opts)
-    dm = IO.popen((dmenu_cmd or 'dmenu'), 'w+')
-    opts.each do |opt|
-      dm.puts opt
-    end
-    dm.close_write
-    value = dm.read
-    dm.close
-    unless $? == 0
-      raise 'Operation cancelled'
-    end
-    value
-  end
-end
+require 'rubygems'
+require 'dmenu'
 
 class MyDMenu
   ConfigFile = ENV['HOME'] + '/.mydmenu.rb'
-  extend DMenu
 
   def self.cmd(name, command = nil, &block)
     @commands = {} unless @commands
@@ -37,7 +21,7 @@ class MyDMenu
 
   def self.run
     # Obtain the command to run from the sorted list.
-    command = dmenu(@command_keys)
+    command = DMenu.dmenu(@command_keys, :cmd => @dmenu_cmd)
     to_exec = case @commands[command]
     when String
       @commands[command]
